@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <style>
+      body { margin: 0 12px 12px; overflow-y: scroll; font: 14px/1.5 sans-serif; }
+      img { width: 100%; height: auto; display: block; }
+      button { border: 0; background: #000; color: #fff; cursor: pointer; }
+      .container { max-width: 540px; margin: 0 auto; }
+      .action { padding: 12px 0; display: flex; }
+      .action button { flex: 1; padding: 10px 0; font: inherit; }
+      .action button + button { margin-left: 12px; }
+      .result a { display: block; }
+      .result a + a { margin-top: 12px; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="action">
+        <button id="btn_paste">Paste</button>
+        <button id="btn_paste_with_download">Load</button>
+      </div>
+      <div class="result" id="result"></div>
+    </div>
+    <script src="./main.js"></script>
+  </body>
+</html>
