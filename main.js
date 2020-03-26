@@ -32,17 +32,24 @@ function parse_json(raw) {
 }
 
 function format_object(x) {
+  if (x.is_video) {
+    x.src = x.video_url
+  } else {
+    x.src = x.display_resources.pop().src
+  }
+
   return {
     name: x.shortcode,
-    src: x.display_resources.pop().src,
+    src: x.src,
+    is_video: x.is_video
   }
 }
 
-function for_create_image(x) {
-  x.forEach(x => create_image(x.name, x.src))
+function for_create(x) {
+  x.forEach(x => create(x.name, x.src, x.is_video))
 }
 
-function create_image(name, src) {
+function create(name, src) {
   let img = document.createElement('img')
   img.src = src
   let ali = document.createElement('a')
@@ -51,15 +58,16 @@ function create_image(name, src) {
   result.appendChild(ali)
 }
 
-function for_download_image(x) {
-  x.forEach(x => download_image(x.name, x.src))
+function for_download(x) {
+  x.forEach(x => download(x.name, x.src, x.is_video))
 }
 
-function download_image(name, src) {
+function download(name, src, is_video) {
   fetch(src).then(x => x.blob()).then(x => {
     let ali = document.createElement('a')
     let url = URL.createObjectURL(x)
-    ali = Object.assign(ali, { href: url, download: `${name}.png` })
+    is_video = is_video ? 'mp4' : 'png'
+    ali = Object.assign(ali, { href: url, download: `${name}.${is_video}` })
     ali.click()
     URL.revokeObjectURL(url)
   })
@@ -72,12 +80,12 @@ btn_paste.addEventListener('click', () => {
   navigator.clipboard.readText().
     then(x => check_json(x)).
     then(x => parse_json(x)).
-    then(x => for_create_image(x))
+    then(x => for_create(x))
 })
 
 btn_pdown.addEventListener('click', () => {
   navigator.clipboard.readText().
     then(x => check_json(x)).
     then(x => parse_json(x)).
-    then(x => for_download_image(x))
+    then(x => for_download(x))
 })
