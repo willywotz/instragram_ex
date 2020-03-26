@@ -49,13 +49,21 @@ function for_create(x) {
   x.forEach(x => create(x.name, x.src, x.is_video))
 }
 
-function create(name, src) {
-  let img = document.createElement('img')
-  img.src = src
-  let ali = document.createElement('a')
-  ali = Object.assign(ali, { href: src, target: '_blank' })
-  ali.appendChild(img)
-  result.appendChild(ali)
+function create(name, src, is_video) {
+  fetch(src).then(x => x.blob()).then(x => {
+    let url = URL.createObjectURL(x)
+    let box = document.createElement(is_video ? 'video' : 'img')
+    box.src = url
+    if (is_video) { box.autoplay = true }
+    let ali = document.createElement('a')
+    is_video = is_video ? 'mp4' : 'png'
+    ali = Object.assign(ali, {
+      href: url, target: '_blank', download: `${name}.${is_video}`
+    })
+
+    ali.appendChild(box)
+    result.appendChild(ali)
+  })
 }
 
 function for_download(x) {
@@ -74,8 +82,10 @@ function download(name, src, is_video) {
 }
 
 btn_paste.addEventListener('click', () => {
-  while (result.firstChild)
+  while (result.firstChild) {
+    URL.revokeObjectURL(result.firstChild.href)
     result.removeChild(result.firstChild)
+  }
 
   navigator.clipboard.readText().
     then(x => check_json(x)).
