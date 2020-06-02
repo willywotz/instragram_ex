@@ -14,7 +14,6 @@ function check_json(x) {
 
 function fetch_json(x) {
   if (x.pathname.length > 15) {
-    alert('redirect to copy pure json. please login first.')
     return Promise.reject(window.open(x))
   }
 
