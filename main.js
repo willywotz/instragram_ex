@@ -80,21 +80,21 @@ function download(name, src, is_video) {
   })
 }
 
+function pre_click() {
+  return navigator.clipboard.readText().
+    then(x => check_json(x)).
+    then(x => parse_json(x))
+}
+
 btn_paste.addEventListener('click', () => {
   while (result.firstChild) {
     URL.revokeObjectURL(result.firstChild.href)
     result.removeChild(result.firstChild)
   }
 
-  navigator.clipboard.readText().
-    then(x => check_json(x)).
-    then(x => parse_json(x)).
-    then(x => for_create(x))
+  pre_click().then(x => for_create(x))
 })
 
 btn_pdown.addEventListener('click', () => {
-  navigator.clipboard.readText().
-    then(x => check_json(x)).
-    then(x => parse_json(x)).
-    then(x => for_download(x))
+  pre_click().then(x => for_download(x))
 })
