@@ -13,11 +13,7 @@ function check_json(x) {
 }
 
 function fetch_json(x) {
-  if (x.pathname.length > 15) {
-    return Promise.reject(window.open(x))
-  }
-
-  return fetch(x).then(x => x.json())
+  return Promise.reject(window.open(x))
 }
 
 function parse_json(raw) {
